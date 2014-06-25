@@ -1,0 +1,46 @@
+void setup()  {
+  Serial.begin(9600);
+}	
+  void loop()  {
+    		long time = millis(); //record the current system time in the long variable time (for benchmarking purposes)
+    		int maxNumber = 1000000;  //takes an input from the user and stores it in the maxNumber variable, this variable is the maximum number that this program will compute primes up to
+			//boolean[] booleanIsItPrimeArray = new boolean[maxNumber + 1];  //the IsItPrimeArray is used to store whether a specific number is prime
+			boolean booleanIsItPrimeArray[maxNumber + 1];
+                        for (int i = 2; i <= maxNumber; i++) { //starts at 2 and sets all of the values in the array to true
+				booleanIsItPrimeArray[i] = true;
+			}
+			for (int i = 2; i  <= sqrt(maxNumber); i++) { // i serves as what you are testing (first 2, then 3, then 5, then 7...) 
+				if(booleanIsItPrimeArray[i] == true)	{ 
+			        for (int j = i; i*j <= maxNumber; j++) { //j is set equal to i (set to 2, then 3, then 5, then 7) and while i*j is less than the max number it continues
+			        	/*
+			        	 * Explanation of the above two lines of code: 
+			        	 * -the first line serves as what multiple it is crossing off (first 2, then 3, then 5, then 7...)
+			        	 * -the second line will be explained later
+			        	 * -the third line serves to have it actually do the multiplication so to speak
+			        	 * 		-it first checks if i (the multiple) times j (what we're multiplying it by) is less than or equal to maxNumber, if it is than it continues
+			        	 * 		-it then crosses out that number by setting that location in the booleanIsItPrimeArray to false
+			        	 * 		-once the second line loop finishes, then it goes to the above for loop and moves onto the next multiple, 3
+			        	 * -if that multiple has already been set to false, (e.g. 4 would already be set to false because it is a multiple of 2), then it does not continue 
+			        	 * 		-thus if it is already false then it will loop back and try the next multiple
+			        	 * -it will then continue this behavior until it reaches maxNumber, at which point it has crossed out all of the non-primes
+			        	 */
+			        	booleanIsItPrimeArray[i*j] = false; //false means it is not a prime (effectively crossing it out)
+			        	//Serial.println("Debug: setting to false"); //for debugging purposes
+			        }
+				}
+			}
+			Serial.println("1"); //prints out 1 (since this method does not account for 1 I just manually print it out)
+			int prime = 0; //used in calculating how many primes I calculated 
+			for(int i=2; i<maxNumber; i++){ //starts at 2 and counts up to max number
+				if(booleanIsItPrimeArray[i] == true){ //if that spot is not 0, then continue
+					Serial.println(i); //prints out the prime number 
+					prime++;//increases the prime variable by 1
+				}
+			}
+			long totalTime = abs((time - millis()) / 1000); //used for benchmarking purposes
+			Serial.print("It took "); //used for benchmarking purposes
+                        Serial.print(totalTime);
+			//Serial.print("The average time per prime is: " + (float) totalTime / maxNumber); //used for benchmarking purposes
+                        delay(10000000);
+    }
+
